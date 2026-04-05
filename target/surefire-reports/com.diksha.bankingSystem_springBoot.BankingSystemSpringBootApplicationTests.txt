@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.diksha.bankingSystem_springBoot.BankingSystemSpringBootApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.518 s -- in com.diksha.bankingSystem_springBoot.BankingSystemSpringBootApplicationTests
