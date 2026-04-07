@@ -29,8 +29,8 @@ public class TransactionController {
                 2.5d,2.6d,2.7d,2.8d
         );
         Map<String,Object> result=fraudService.checkFraud(features);
-        Integer fraud=(Integer) result.get("fraud");
-        Double probability = (Double) result.get("probability");
+        Integer fraud=((Number) result.get("fraud")).intValue();
+        Double probability = ((Number) result.get("probability")).doubleValue();
         if(probability>0.8){
             return "Transaction Blocked";
 
