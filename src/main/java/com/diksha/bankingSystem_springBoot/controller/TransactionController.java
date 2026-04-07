@@ -1,6 +1,6 @@
 package com.diksha.bankingSystem_springBoot.controller;
-
 import com.diksha.bankingSystem_springBoot.Entity.Transaction;
+import com.diksha.bankingSystem_springBoot.Repository.TransactionRepository;
 import com.diksha.bankingSystem_springBoot.service.FraudDetectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,26 +18,35 @@ import java.util.Map;
 public class TransactionController {
     @Autowired
     private FraudDetectionService fraudService;
+    @Autowired
+    private TransactionRepository transactionRepository;
     @PostMapping("/transfer")
     public String transferMoney(@RequestBody Transaction transaction){
-        List<Double> features = Arrays.asList(
-                0.0d,
-                (double) transaction.getAmount(),
-                0.1d,0.2d,0.3d,0.4d,0.5d,0.6d,
-                0.7d,0.8d,0.9d,1.0d,1.1d,1.2d,
-                1.3d,1.4d,1.5d,1.6d,1.7d,1.8d,
-                1.9d,2.0d,2.1d,2.2d,2.3d,2.4d,
-                2.5d,2.6d,2.7d,2.8d
-        );
-        Map<String,Object> result=fraudService.checkFraud(features);
-        Integer fraud=((Number) result.get("fraud")).intValue();
-        Double probability = ((Number) result.get("probability")).doubleValue();
-        if(probability>0.8){
-            return "Transaction Blocked";
+        transactionRepository.save(transaction);
 
-        }else if(probability >0.5){
-            return "Transaction Flagged";
-        }else{
+        double hour = transaction.getTimestamp().getHour();
+        double amount = transaction.getAmount();
+        double isNight = (hour >= 23 || hour <= 5) ? 1.0 : 0.0;
+        double isHighAmount = amount > 10000 ? 1.0 : 0.0;
+        double isWeekend = transaction.getTimestamp().getDayOfWeek().getValue() >= 6 ? 1.0 : 0.0;
+
+        List<Double> features = Arrays.asList(
+                hour, amount, isNight, isHighAmount, isWeekend,
+                0.0, 0.0, 0.0, 0.0, 0.0,  // V5-V9
+                0.0, 0.0, 0.0, 0.0, 0.0,  // V10-V14
+                0.0, 0.0, 0.0, 0.0, 0.0,  // V15-V19
+                0.0, 0.0, 0.0, 0.0, 0.0,  // V20-V24
+                0.0, 0.0, 0.0, 0.0, amount // V25-V28, Amount
+        );
+
+        Map<String, Object> result = fraudService.checkFraud(features);
+        Double probability = ((Number) result.get("probability")).doubleValue();
+
+        if (probability > 0.8) {
+            return "Transaction Blocked - Fraud Detected";
+        } else if (probability > 0.5) {
+            return "Transaction Flagged - Manual Review Required";
+        } else {
             return "Transaction Successful";
         }
     }

@@ -64,4 +64,7 @@ public class Transaction {
     public void setAccount(Account account) {
         this.account = account;
     }
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 }
