@@ -64,4 +64,34 @@ public class AccountService {
 
         return account;
     }
+    public String transfer(Long fromId, Long toId, double amount) {
+        Account from = accountRepository.findById(fromId)
+                .orElseThrow(() -> new RuntimeException("Sender account not found"));
+        Account to = accountRepository.findById(toId)
+                .orElseThrow(() -> new RuntimeException("Receiver account not found"));
+
+        if (amount > from.getBalance()) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+
+        from.setBalance(from.getBalance() - amount);
+        to.setBalance(to.getBalance() + amount);
+
+        Transaction debit = new Transaction();
+        debit.setType("TRANSFER");
+        debit.setAmount(amount);
+        debit.setAccount(from);
+        trannsactionRepository.save(debit);
+
+        Transaction credit = new Transaction();
+        credit.setType("DEPOSIT");
+        credit.setAmount(amount);
+        credit.setAccount(to);
+        trannsactionRepository.save(credit);
+
+        accountRepository.save(from);
+        accountRepository.save(to);
+
+        return "SUCCESS";
+    }
 }

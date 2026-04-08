@@ -67,4 +67,9 @@ public class Transaction {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+    @Transient  // DB mein save nahi hoga, sirf request ke liye
+    private Long toAccountId;
+
+    public Long getToAccountId() { return toAccountId; }
+    public void setToAccountId(Long toAccountId) { this.toAccountId = toAccountId; }
 }
