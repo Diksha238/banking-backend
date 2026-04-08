@@ -17,8 +17,8 @@ public class FraudDetectionService {
     private final RestTemplate restTemplate= new RestTemplate();
     public Map<String,Object> checkFraud(List<Double> features){
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5000); // 5 sec
-        factory.setReadTimeout(5000);    // 5 sec
+        factory.setConnectTimeout(50000); // 5 sec
+        factory.setReadTimeout(50000);    // 5 sec
 
         RestTemplate restTemplate = new RestTemplate(factory);
 
