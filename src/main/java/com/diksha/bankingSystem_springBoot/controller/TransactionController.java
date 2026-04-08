@@ -42,9 +42,9 @@ public class TransactionController {
         Map<String, Object> result = fraudService.checkFraud(features);
         Double probability = ((Number) result.get("probability")).doubleValue();
 
-        if (probability > 0.8) {
+        if (probability > 0.001) {
             return "Transaction Blocked - Fraud Detected";
-        } else if (probability > 0.5) {
+        } else if (probability > 0.0005) {
             return "Transaction Flagged - Manual Review Required";
         } else {
             return "Transaction Successful";
