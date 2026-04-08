@@ -38,9 +38,9 @@ public class TransactionController {
                 0.0, 0.0, 0.0, 0.0, 0.0,  // V20-V24
                 0.0, 0.0, 0.0, 0.0, amount // V25-V28, Amount
         );
-
         Map<String, Object> result = fraudService.checkFraud(features);
         Double probability = ((Number) result.get("probability")).doubleValue();
+        System.out.println("FRAUD PROBABILITY: " + probability); // add karo
 
         if (probability > 0.001) {
             return "Transaction Blocked - Fraud Detected";
