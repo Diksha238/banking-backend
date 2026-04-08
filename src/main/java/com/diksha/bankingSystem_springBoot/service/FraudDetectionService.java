@@ -22,7 +22,7 @@ public class FraudDetectionService {
 
         RestTemplate restTemplate = new RestTemplate(factory);
 
-        String url = "https://your-ml-api.onrender.com/predict";
+        String url = "https://fraud-api-ufrg.onrender.com/predict";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
