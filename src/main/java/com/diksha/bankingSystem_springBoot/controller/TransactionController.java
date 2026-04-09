@@ -4,16 +4,13 @@ import com.diksha.bankingSystem_springBoot.Repository.TransactionRepository;
 import com.diksha.bankingSystem_springBoot.service.AccountService;
 import com.diksha.bankingSystem_springBoot.service.FraudDetectionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
