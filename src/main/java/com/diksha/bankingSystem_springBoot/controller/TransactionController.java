@@ -26,12 +26,11 @@ public class TransactionController {
     @PostMapping("/transfer")
     public String transferMoney(@RequestBody Transaction transaction){
 
-        double hour = transaction.getTimestamp().getHour();
+        double hour = LocalDateTime.now().getHour();
         double amount = transaction.getAmount();
         double isNight = (hour >= 23 || hour <= 5) ? 1.0 : 0.0;
         double isHighAmount = amount > 10000 ? 1.0 : 0.0;
-        double isWeekend = transaction.getTimestamp().getDayOfWeek().getValue() >= 6 ? 1.0 : 0.0;
-
+        double isWeekend = LocalDateTime.now().getDayOfWeek().getValue() >= 6 ? 1.0 : 0.0;
         List<Double> features = Arrays.asList(
                 hour, amount, isNight, isHighAmount, isWeekend,
                 0.0, 0.0, 0.0, 0.0, 0.0,  // V5-V9
